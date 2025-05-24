@@ -1,5 +1,5 @@
 # CFGParser
-Parser for context-free grammars. The program manages the CFG that models the langauge L = { aⁿ bⁿ | n ≥ 0 }
+Parser for context-free grammars. The program manages the CFG that models the langauge L = {aⁿbⁿ | n ≥ 0}
 ## CFG Definition
 Create a programmatic representation of the following: S → aSb | ε <br>
 In the program a CFG is represented like this:
