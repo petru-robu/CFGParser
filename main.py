@@ -74,7 +74,7 @@ class CFG_ab:
         if len(min_possible) > len(target):
             return None
 
-        #expand S
+        #expand S (leftmost derivation)
         s_index = current.find('S')
         if s_index == -1:
             return None
@@ -91,13 +91,14 @@ class CFG_ab:
     
     def show_derivation(self, target):
         #shows a derivation
-        steps = cfg.derive(target)
+        steps = self.derive(target)
         if steps:
             print(' -> '.join(steps))
 
     def check_membership(self, string):
         #check if a given string is member of our particular CFG
         #in this case we simply check that |a| = |b| and a's before b's
+        #for checking memberships there are more complex algorithms like CYK or Earley parser
         if string == "":
             return True
         
@@ -119,7 +120,7 @@ class CFG_abc:
             'S': [['a', 'S', 'b', 'c'], ['a', 'b', 'c']]
         }
 
-    def is_member(self, string):
+    def check_membership(self, string):
         #simply check if |a| == |b| == |c| and a before b before c
         if len(string) % 3 != 0 or len(string) == 0:
             return False
@@ -153,14 +154,42 @@ class CFG_abc:
         return list(ans)
 
 if __name__ == '__main__':
-    cfg = CFG_ab()
-    generated = cfg.generate_strings()
-    cfg.show_derivation('aaaabbbb')
-    print(cfg.check_membership('abb'))
+    #driver code
+    # a^n * b^n language
+    print('a^n * b^n language')
+    ab = CFG_ab()
+    print('---Generating strings---')
+    ab.generate_strings()
+    ab.generate_strings()
 
-    cf = CFG_abc()
-    generated = cf.generate_strings()
+    print('---Checking derivations---')
+    generated = ab.generate_strings(5)
+    for str in generated:
+        ab.show_derivation(str)
+
+    print('---Checking membership---')
+    for str in generated:
+        if str == '':
+            print('ε', end='')
+        print(str, ':', ab.check_membership(str))
+
+    print('\ntrying to model a^n * b^n * c^n language')
+    #trying to model a^n * b^n * c^n language
+    abc = CFG_abc()
+    print('---Generating strings---')
+    abc.generate_strings()
+    abc.generate_strings() #generates wrong strings as a^n * b^n * c^n is not CFG
+
+    print('---Checking membership---')
+    generated = abc.generate_strings(5)
+    for str in generated:
+        if str == '':
+            print('ε', end='')
+        print(str, ':', abc.check_membership(str))
+
+
     
+
     
 
 
